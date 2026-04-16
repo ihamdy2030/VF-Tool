@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>HSE Smart Audit Engine</title>
+
+<style>
+body {font-family:'Segoe UI'; margin:0; background:#f4f6f8;}
+
+.header {
+display:flex;
+justify-content:space-between;
+align-items:center;
+background:white;
+padding:15px 30px;
+box-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
+
+.title {
+font-size:22px;
+font-weight:bold;
+color:#003366;
+}
+
+.vodafone-line {
+height:5px;
+background:#e60000;
+}
+
+.container {padding:25px;}
+
+#search, #activityFilter {
+width:100%;
+padding:12px;
+margin-bottom:10px;
+font-size:15px;
+border-radius:8px;
+border:1px solid #ccc;
+}
+
+/* Results */
+.result {
+background:white;
+margin-top:12px;
+padding:18px;
+border-radius:10px;
+box-shadow:0 2px 5px rgba(0,0,0,0.1);
+border-left:5px solid #003366;
+}
+
+.section {font-weight:bold; color:#003366;}
+
+.highlight {background:yellow;}
+
+button {
+margin-top:10px;
+padding:8px 12px;
+background:#e60000;
+color:white;
+border:none;
+border-radius:5px;
+cursor:pointer;
+}
+
+button:hover {background:#b80000;}
+
+iframe {
+width:100%;
+height:500px;
+margin-top:20px;
+border-radius:10px;
+}
+
+/* Tables */
+table {
+width:100%;
+border-collapse:collapse;
+margin-top:20px;
+background:white;
+}
+
+th {
+background:#003366;
+color:white;
+padding:10px;
+}
+
+td {
+padding:10px;
+border-bottom:1px solid #ddd;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+<div class="title">HSE Smart Audit Engine (HSW22 + SHW22)</div>
+</div>
+
+<div class="vodafone-line"></div>
+
+<div class="container">
+
+<input type="text" id="search" placeholder="🔍 Search (Height, PPE, Electrical...)">
+
+<select id="activityFilter">
+<option value="">Filter by Activity</option>
+<option>Working at Height</option>
+<option>Electrical Work</option>
+<option>Lifting</option>
+<option>Confined Space</option>
+<option>Driving</option>
+</select>
+
+<div id="results"></div>
+
+<iframe id="pdfViewer"></iframe>
+
+<h2>PPE & EN Standards</h2>
+<table>
+<tr><th>PPE</th><th>EN Standard</th></tr>
+<tr><td>Helmet</td><td>EN 397</td></tr>
+<tr><td>Safety Shoes</td><td>EN ISO 20345</td></tr>
+<tr><td>Harness</td><td>EN 361</td></tr>
+<tr><td>Lanyard</td><td>EN 355</td></tr>
+<tr><td>Gloves</td><td>EN 388 / EN 374</td></tr>
+<tr><td>Eye Protection</td><td>EN 166</td></tr>
+<tr><td>Respirator</td><td>EN 140 / EN 143</td></tr>
+<tr><td>Hearing Protection</td><td>EN 352</td></tr>
+</table>
+
+</div>
+
+<script>
+
+const data = [
+
+{
+activity:"Working at Height",
+text:"Workers must remain attached at all times using full body harness.",
+hazard:"Fall from height",
+ppe:"Harness, lanyard, helmet, safety shoes",
+page:8,
+file:"HSW22.pdf"
+},
+
+{
+activity:"Electrical Work",
+text:"No live electrical work is allowed. Lockout/Tagout must be applied.",
+hazard:"Electric shock / arc flash",
+ppe:"Dielectric gloves, helmet, face shield",
+page:9,
+file:"HSW22.pdf"
+},
+
+{
+activity:"Lifting",
+text:"All lifting must have a lifting plan and trained personnel.",
+hazard:"Falling objects",
+ppe:"Helmet, gloves, safety shoes",
+page:12,
+file:"HSW22.pdf"
+},
+
+{
+activity:"Confined Space",
+text:"Confined spaces require gas testing and rescue plan.",
+hazard:"Toxic gases",
+ppe:"Respirator, harness, detector",
+page:14,
+file:"HSW22.pdf"
+},
+
+{
+activity:"Driving",
+text:"Seat belts must be worn and mobile phone use is prohibited.",
+hazard:"Road accidents",
+ppe:"Seatbelt",
+page:7,
+file:"SHW22.pdf"
+},
+
+{
+activity:"General Safety",
+text:"Suppliers must comply with HSE policies and ensure safe working conditions.",
+hazard:"General risks",
+ppe:"All PPE",
+page:5,
+file:"SHW22.pdf"
+}
+
+];
+
+const resultsDiv = document.getElementById("results");
+const viewer = document.getElementById("pdfViewer");
+
+function highlight(text, keyword) {
+return text.replace(new RegExp(keyword, "gi"),
+match => `<span class="highlight">${match}</span>`);
+}
+
+function renderResults(keyword, filter){
+
+resultsDiv.innerHTML = "";
+
+let results = data.filter(item => 
+(item.text.toLowerCase().includes(keyword) ||
+item.activity.toLowerCase().includes(keyword)) &&
+(filter === "" || item.activity === filter)
+);
+
+results.forEach(item => {
+resultsDiv.innerHTML += `
+<div class="result">
+<div class="section">${item.activity}</div>
+
+<div><b>Requirement:</b> ${highlight(item.text, keyword)}</div>
+
+<div><b>Hazard:</b> ${item.hazard}</div>
+
+<div><b>Required PPE:</b> ${item.ppe}</div>
+
+<button onclick="openPDF('${item.file}', ${item.page})">
+📄 ${item.file} - Page ${item.page}
+</button>
+</div>
+`;
+});
+
+}
+
+function openPDF(file, page){
+viewer.src = file + "#page=" + page;
+}
+
+document.getElementById("search").addEventListener("input", function(e){
+renderResults(e.target.value.toLowerCase(), document.getElementById("activityFilter").value);
+});
+
+document.getElementById("activityFilter").addEventListener("change", function(e){
+renderResults(document.getElementById("search").value.toLowerCase(), e.target.value);
+});
+
+</script>
+
+</body>
+</html>
