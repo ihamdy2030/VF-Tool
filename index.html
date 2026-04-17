@@ -22,22 +22,34 @@ box-shadow:0 2px 8px rgba(0,0,0,0.1);
 font-size:20px;
 font-weight:bold;
 color:#003366;
-text-align:center;
 flex:1;
+text-align:center;
 }
-
-.vodafone-line {height:5px; background:#e60000;}
 
 .container {padding:20px;}
 
-#search, #ppeFilter {
+#search {
 width:100%;
-padding:12px;
-margin-bottom:10px;
-font-size:15px;
+padding:14px;
+font-size:16px;
 border-radius:8px;
 border:1px solid #ccc;
 }
+
+.suggestions {
+background:white;
+border:1px solid #ccc;
+border-top:none;
+max-height:150px;
+overflow:auto;
+}
+
+.suggestion {
+padding:10px;
+cursor:pointer;
+}
+
+.suggestion:hover {background:#f1f1f1;}
 
 .result {
 background:white;
@@ -48,7 +60,6 @@ box-shadow:0 2px 5px rgba(0,0,0,0.1);
 border-left:5px solid #003366;
 }
 
-.section {font-weight:bold; color:#003366;}
 .highlight {background:yellow;}
 
 button {
@@ -65,101 +76,24 @@ iframe {
 width:100%;
 height:500px;
 margin-top:15px;
-border-radius:10px;
 }
-
-hr {margin:10px 0;}
 </style>
 </head>
 
 <body>
 
-<!-- HEADER -->
 <div class="header">
 <img src="tuv.png" class="logo">
 <div class="title">Smart Audit Engine</div>
 <img src="vodafone.png" class="logo">
 </div>
 
-<div class="vodafone-line"></div>
-
 <div class="container">
 
-<input type="text" id="search" placeholder="🔍 Search (PPE, Height, EN 361...)">
-
-<select id="ppeFilter">
-<option value="">Select PPE Category</option>
-<option value="height">Working at Height</option>
-<option value="electrical">Electrical Work</option>
-</select>
+<input type="text" id="search" placeholder="🔍 Search anything (PPE, EN, Activity...)">
+<div id="suggestions" class="suggestions"></div>
 
 <div id="results"></div>
-<div id="ppeResults"></div>
-
-<!-- 🔥 ALL ACTIVITIES -->
-<h2>Activities & Required PPE</h2>
-
-<div class="result">
-
-<b>🧗 Working at Height</b><br>
-PPE: Harness, Lanyard, Helmet, Safety Shoes<br>
-EN: EN 361, EN 355, EN 397, EN ISO 20345
-
-<hr>
-
-<b>⚡ Electrical Work</b><br>
-PPE: Insulated Gloves, Dielectric Shoes, Face Shield<br>
-EN: EN 60903, EN 50321, EN 166
-
-<hr>
-
-<b>🏗️ Lifting Operations</b><br>
-PPE: Helmet, Gloves, Safety Shoes, Reflective Vest<br>
-EN: EN 397, EN 388, EN ISO 20345
-
-<hr>
-
-<b>🚧 Confined Space</b><br>
-PPE: Respirator, Harness, Gas Detector<br>
-EN: EN 140, EN 143, EN 361
-
-<hr>
-
-<b>🚗 Driving</b><br>
-PPE: Seat Belt<br>
-EN: Vehicle Safety Standards
-
-<hr>
-
-<b>🔥 Hot Work (Welding & Cutting)</b><br>
-PPE: Welding Helmet, Leather Gloves, Apron, Face Shield<br>
-EN: EN 175, EN 379, EN ISO 11611
-
-<hr>
-
-<b>⛏️ Excavation / Civil Work</b><br>
-PPE: Helmet, Safety Shoes, Reflective Vest<br>
-EN: EN 397, EN ISO 20345
-
-<hr>
-
-<b>📡 RF Work</b><br>
-PPE: RF Monitor, Helmet, Safety Shoes<br>
-EN: RF Exposure Standards
-
-<hr>
-
-<b>📦 Manual Handling</b><br>
-PPE: Gloves, Safety Shoes<br>
-EN: EN 388, EN ISO 20345
-
-<hr>
-
-<b>🧪 Chemical Work</b><br>
-PPE: Chemical Gloves, Respirator, Goggles<br>
-EN: EN 374, EN 140, EN 166
-
-</div>
 
 <iframe id="pdfViewer"></iframe>
 
@@ -167,108 +101,121 @@ EN: EN 374, EN 140, EN 166
 
 <script>
 
-// SEARCH DATA
 const data = [
 {
+activity:"Confined Space",
+text:"Confined spaces require gas testing and permit.",
+keywords:"confined space gas oxygen entry permit",
+hazard:"Toxic gas",
+ppe:"Respirator, Harness",
+en:"EN 140, EN 143, EN 361",
+page:14,
+file:"HSW22.pdf"
+},
+{
 activity:"Working at Height",
-text:"Workers must remain attached using full body harness.",
-hazard:"Fall from height",
-ppe:"Harness, Lanyard, Helmet",
-en:"EN 361, EN 355, EN 397",
+text:"Full fall protection required.",
+keywords:"height fall harness lanyard",
+hazard:"Fall",
+ppe:"Harness, Helmet",
+en:"EN 361, EN 397",
 page:8,
 file:"HSW22.pdf"
 },
 {
-activity:"Electrical Work",
-text:"No live electrical work allowed.",
-hazard:"Electric shock",
-ppe:"Insulated gloves, helmet",
-en:"EN 60903, EN 397",
-page:9,
-file:"HSW22.pdf"
-},
-{
 activity:"Hot Work",
-text:"Welding and cutting require proper PPE and fire protection.",
-hazard:"Burns, fire",
-ppe:"Welding helmet, gloves, apron",
-en:"EN 175, EN 379, EN ISO 11611",
+text:"Welding requires fire protection.",
+keywords:"welding cutting hot work fire",
+hazard:"Fire",
+ppe:"Helmet, Gloves",
+en:"EN 175, EN 379",
 page:20,
 file:"HSW22.pdf"
 }
 ];
 
-// SEARCH
-document.getElementById("search").addEventListener("input", function(e){
+const searchInput = document.getElementById("search");
+const resultsDiv = document.getElementById("results");
+const suggestionsDiv = document.getElementById("suggestions");
 
-let keyword = e.target.value.toLowerCase();
-let resultsDiv = document.getElementById("results");
-resultsDiv.innerHTML = "";
+function highlight(text, keyword){
+return text.replace(new RegExp(keyword, "gi"),
+m => `<span class="highlight">${m}</span>`);
+}
 
-if(keyword === "") return;
+// Suggestions
+searchInput.addEventListener("input", function(){
+let keyword = this.value.toLowerCase();
+suggestionsDiv.innerHTML = "";
 
-let results = data.filter(item =>
-item.text.toLowerCase().includes(keyword) ||
+if(keyword.length < 2) return;
+
+let suggestions = data.filter(item =>
 item.activity.toLowerCase().includes(keyword) ||
-item.ppe.toLowerCase().includes(keyword) ||
-item.en.toLowerCase().includes(keyword)
+item.keywords.includes(keyword)
 );
 
-results.forEach(item => {
+suggestions.forEach(item=>{
+suggestionsDiv.innerHTML += `
+<div class="suggestion" onclick="selectSuggestion('${item.activity}')">
+${item.activity}
+</div>`;
+});
+});
+
+function selectSuggestion(text){
+searchInput.value = text;
+suggestionsDiv.innerHTML = "";
+performSearch(text.toLowerCase());
+}
+
+// Search
+searchInput.addEventListener("keyup", function(e){
+performSearch(this.value.toLowerCase());
+});
+
+function performSearch(keyword){
+
+resultsDiv.innerHTML = "";
+if(keyword === "") return;
+
+let results = data.map(item => {
+
+let score = 0;
+
+if(item.activity.toLowerCase().includes(keyword)) score += 5;
+if(item.text.toLowerCase().includes(keyword)) score += 3;
+if(item.ppe.toLowerCase().includes(keyword)) score += 2;
+if(item.en.toLowerCase().includes(keyword)) score += 2;
+if(item.keywords.toLowerCase().includes(keyword)) score += 4;
+
+return {...item, score};
+})
+.filter(item => item.score > 0)
+.sort((a,b)=> b.score - a.score);
+
+results.forEach(item=>{
 resultsDiv.innerHTML += `
 <div class="result">
-<div class="section">${item.activity}</div>
-<div><b>Requirement:</b> ${item.text}</div>
+
+<b>${highlight(item.activity, keyword)}</b>
+
+<div>${highlight(item.text, keyword)}</div>
+
 <div><b>Hazard:</b> ${item.hazard}</div>
 <div><b>PPE:</b> ${item.ppe}</div>
 <div><b>EN:</b> ${item.en}</div>
-<button onclick="openPDF('${item.file}', ${item.page})">
+
+<button onclick="openPDF('${item.file}', ${item.page}')">
 📄 Open Page ${item.page}
 </button>
-</div>
-`;
+
+</div>`;
 });
 
-});
-
-// PPE DETAILS DROPDOWN
-const ppeDetails = {
-height: `
-<h3>🧗 Working at Height</h3>
-<ul>
-<li>EN 361 / 358 / 813 – Harness</li>
-<li>EN 354 / 355 – Lanyards</li>
-<li>EN 360 – Fall Arrestors</li>
-<li>EN 362 – Connectors</li>
-<li>EN 795 – Anchors</li>
-</ul>
-`,
-electrical: `
-<h3>⚡ Electrical Work</h3>
-<ul>
-<li>EN 60903 – Insulated Gloves</li>
-<li>EN 50321 – Footwear</li>
-<li>EN 6111 – Insulating Mat</li>
-<li>EN 166 – Face Shield</li>
-</ul>
-`
-};
-
-document.getElementById("ppeFilter").addEventListener("change", function(){
-
-let value = this.value;
-let output = document.getElementById("ppeResults");
-
-if(value === ""){
-output.innerHTML = "";
-return;
 }
 
-output.innerHTML = `<div class="result">${ppeDetails[value]}</div>`;
-});
-
-// PDF VIEW
-function openPDF(file, page){
+function openPDF(file,page){
 document.getElementById("pdfViewer").src = file + "#page=" + page;
 }
 
