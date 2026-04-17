@@ -68,7 +68,7 @@ margin-top:15px;
 border-radius:10px;
 }
 
-ul {margin-top:5px;}
+hr {margin:10px 0;}
 </style>
 </head>
 
@@ -96,6 +96,71 @@ ul {margin-top:5px;}
 <div id="results"></div>
 <div id="ppeResults"></div>
 
+<!-- 🔥 ALL ACTIVITIES -->
+<h2>Activities & Required PPE</h2>
+
+<div class="result">
+
+<b>🧗 Working at Height</b><br>
+PPE: Harness, Lanyard, Helmet, Safety Shoes<br>
+EN: EN 361, EN 355, EN 397, EN ISO 20345
+
+<hr>
+
+<b>⚡ Electrical Work</b><br>
+PPE: Insulated Gloves, Dielectric Shoes, Face Shield<br>
+EN: EN 60903, EN 50321, EN 166
+
+<hr>
+
+<b>🏗️ Lifting Operations</b><br>
+PPE: Helmet, Gloves, Safety Shoes, Reflective Vest<br>
+EN: EN 397, EN 388, EN ISO 20345
+
+<hr>
+
+<b>🚧 Confined Space</b><br>
+PPE: Respirator, Harness, Gas Detector<br>
+EN: EN 140, EN 143, EN 361
+
+<hr>
+
+<b>🚗 Driving</b><br>
+PPE: Seat Belt<br>
+EN: Vehicle Safety Standards
+
+<hr>
+
+<b>🔥 Hot Work (Welding & Cutting)</b><br>
+PPE: Welding Helmet, Leather Gloves, Apron, Face Shield<br>
+EN: EN 175, EN 379, EN ISO 11611
+
+<hr>
+
+<b>⛏️ Excavation / Civil Work</b><br>
+PPE: Helmet, Safety Shoes, Reflective Vest<br>
+EN: EN 397, EN ISO 20345
+
+<hr>
+
+<b>📡 RF Work</b><br>
+PPE: RF Monitor, Helmet, Safety Shoes<br>
+EN: RF Exposure Standards
+
+<hr>
+
+<b>📦 Manual Handling</b><br>
+PPE: Gloves, Safety Shoes<br>
+EN: EN 388, EN ISO 20345
+
+<hr>
+
+<b>🧪 Chemical Work</b><br>
+PPE: Chemical Gloves, Respirator, Goggles<br>
+EN: EN 374, EN 140, EN 166
+
+</div>
+
 <iframe id="pdfViewer"></iframe>
 
 </div>
@@ -121,10 +186,19 @@ ppe:"Insulated gloves, helmet",
 en:"EN 60903, EN 397",
 page:9,
 file:"HSW22.pdf"
+},
+{
+activity:"Hot Work",
+text:"Welding and cutting require proper PPE and fire protection.",
+hazard:"Burns, fire",
+ppe:"Welding helmet, gloves, apron",
+en:"EN 175, EN 379, EN ISO 11611",
+page:20,
+file:"HSW22.pdf"
 }
 ];
 
-// SEARCH FUNCTION
+// SEARCH
 document.getElementById("search").addEventListener("input", function(e){
 
 let keyword = e.target.value.toLowerCase();
@@ -157,55 +231,29 @@ resultsDiv.innerHTML += `
 
 });
 
-// PPE DETAILS (ADVANCED)
+// PPE DETAILS DROPDOWN
 const ppeDetails = {
-
 height: `
 <h3>🧗 Working at Height</h3>
-
-<b>🔹 Fall Arrest Equipment:</b>
 <ul>
-<li>EN 361 / EN 358 / EN 813 – Harness</li>
-<li>EN 354 / EN 355 – Lanyards</li>
+<li>EN 361 / 358 / 813 – Harness</li>
+<li>EN 354 / 355 – Lanyards</li>
 <li>EN 360 – Fall Arrestors</li>
 <li>EN 362 – Connectors</li>
-<li>EN 363 – Systems</li>
-<li>EN 353-1 / 353-2 – Fall Arrest Systems</li>
 <li>EN 795 – Anchors</li>
 </ul>
-
-<b>🔹 Work Positioning:</b>
-<ul>
-<li>EN 358 – Sit Harness</li>
-<li>EN 341 – Descenders</li>
-<li>EN 567 – Rope Clamps</li>
-<li>EN 12278 – Pulleys</li>
-<li>EN 1891 – Rope Access</li>
-</ul>
-
-<b>🔹 Other PPE:</b>
-<ul>
-<li>EN 397 – Helmet</li>
-<li>EN 12492 – Climbing Helmet</li>
-<li>EN 12275 – Connectors</li>
-<li>EN 566 / EN 795B / EN 1492-2 – Slings</li>
-<li>BS 1290 – Wire Slings</li>
-</ul>
 `,
-
 electrical: `
 <h3>⚡ Electrical Work</h3>
-
 <ul>
-<li>EN/IEC 60903 – Insulated Gloves</li>
+<li>EN 60903 – Insulated Gloves</li>
 <li>EN 50321 – Footwear</li>
 <li>EN 6111 – Insulating Mat</li>
-<li>EN 166 / EN 170 – Face Shield</li>
+<li>EN 166 – Face Shield</li>
 </ul>
 `
 };
 
-// DROPDOWN FUNCTION
 document.getElementById("ppeFilter").addEventListener("change", function(){
 
 let value = this.value;
@@ -219,7 +267,7 @@ return;
 output.innerHTML = `<div class="result">${ppeDetails[value]}</div>`;
 });
 
-// PDF VIEWER
+// PDF VIEW
 function openPDF(file, page){
 document.getElementById("pdfViewer").src = file + "#page=" + page;
 }
