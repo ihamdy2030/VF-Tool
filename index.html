@@ -68,16 +68,7 @@ margin-top:15px;
 border-radius:10px;
 }
 
-/* Table */
-table {
-width:100%;
-border-collapse:collapse;
-margin-top:25px;
-background:white;
-}
-
-th {background:#003366; color:white; padding:10px;}
-td {padding:10px; border-bottom:1px solid #ddd;}
+ul {margin-top:5px;}
 </style>
 </head>
 
@@ -107,30 +98,15 @@ td {padding:10px; border-bottom:1px solid #ddd;}
 
 <iframe id="pdfViewer"></iframe>
 
-<h2>PPE & EN Standards (Full List)</h2>
-
-<table>
-<tr><th>PPE</th><th>EN Standard</th></tr>
-<tr><td>Helmet</td><td>EN 397</td></tr>
-<tr><td>High Visibility Vest</td><td>EN ISO 20471</td></tr>
-<tr><td>Safety Shoes</td><td>EN ISO 20345</td></tr>
-<tr><td>Harness</td><td>EN 361</td></tr>
-<tr><td>Lanyard</td><td>EN 355</td></tr>
-<tr><td>Gloves</td><td>EN 388 / EN 374</td></tr>
-<tr><td>Eye Protection</td><td>EN 166</td></tr>
-<tr><td>Respirator</td><td>EN 140 / EN 143</td></tr>
-<tr><td>Hearing Protection</td><td>EN 352</td></tr>
-</table>
-
 </div>
 
 <script>
 
-// MAIN DATA
+// SEARCH DATA
 const data = [
 {
 activity:"Working at Height",
-text:"Workers must remain attached at all times using full body harness.",
+text:"Workers must remain attached using full body harness.",
 hazard:"Fall from height",
 ppe:"Harness, Lanyard, Helmet",
 en:"EN 361, EN 355, EN 397",
@@ -139,46 +115,20 @@ file:"HSW22.pdf"
 },
 {
 activity:"Electrical Work",
-text:"No live electrical work is allowed.",
+text:"No live electrical work allowed.",
 hazard:"Electric shock",
-ppe:"Insulated gloves, helmet, face shield",
-en:"EN 60903, EN 397, EN 166",
+ppe:"Insulated gloves, helmet",
+en:"EN 60903, EN 397",
 page:9,
 file:"HSW22.pdf"
 }
 ];
 
-// PPE DETAILS
-const ppeDetails = {
-height: `
-<h3>Working at Height - PPE Standards</h3>
-<ul>
-<li>EN 361 / 358 / 813 - Harness</li>
-<li>EN 354 / 355 - Lanyards</li>
-<li>EN 360 - Fall Arrestors</li>
-<li>EN 362 - Connectors</li>
-<li>EN 795 - Anchors</li>
-<li>EN 397 - Helmet</li>
-</ul>
-`,
-electrical: `
-<h3>Electrical Work - PPE Standards</h3>
-<ul>
-<li>EN 60903 - Gloves</li>
-<li>EN 50321 - Footwear</li>
-<li>EN 6111 - Insulating mat</li>
-<li>EN 166 - Face shield</li>
-</ul>
-`
-};
-
-const resultsDiv = document.getElementById("results");
-const viewer = document.getElementById("pdfViewer");
-
-// SEARCH
+// SEARCH FUNCTION
 document.getElementById("search").addEventListener("input", function(e){
 
 let keyword = e.target.value.toLowerCase();
+let resultsDiv = document.getElementById("results");
 resultsDiv.innerHTML = "";
 
 if(keyword === "") return;
@@ -207,7 +157,55 @@ resultsDiv.innerHTML += `
 
 });
 
-// DROPDOWN
+// PPE DETAILS (ADVANCED)
+const ppeDetails = {
+
+height: `
+<h3>🧗 Working at Height</h3>
+
+<b>🔹 Fall Arrest Equipment:</b>
+<ul>
+<li>EN 361 / EN 358 / EN 813 – Harness</li>
+<li>EN 354 / EN 355 – Lanyards</li>
+<li>EN 360 – Fall Arrestors</li>
+<li>EN 362 – Connectors</li>
+<li>EN 363 – Systems</li>
+<li>EN 353-1 / 353-2 – Fall Arrest Systems</li>
+<li>EN 795 – Anchors</li>
+</ul>
+
+<b>🔹 Work Positioning:</b>
+<ul>
+<li>EN 358 – Sit Harness</li>
+<li>EN 341 – Descenders</li>
+<li>EN 567 – Rope Clamps</li>
+<li>EN 12278 – Pulleys</li>
+<li>EN 1891 – Rope Access</li>
+</ul>
+
+<b>🔹 Other PPE:</b>
+<ul>
+<li>EN 397 – Helmet</li>
+<li>EN 12492 – Climbing Helmet</li>
+<li>EN 12275 – Connectors</li>
+<li>EN 566 / EN 795B / EN 1492-2 – Slings</li>
+<li>BS 1290 – Wire Slings</li>
+</ul>
+`,
+
+electrical: `
+<h3>⚡ Electrical Work</h3>
+
+<ul>
+<li>EN/IEC 60903 – Insulated Gloves</li>
+<li>EN 50321 – Footwear</li>
+<li>EN 6111 – Insulating Mat</li>
+<li>EN 166 / EN 170 – Face Shield</li>
+</ul>
+`
+};
+
+// DROPDOWN FUNCTION
 document.getElementById("ppeFilter").addEventListener("change", function(){
 
 let value = this.value;
@@ -218,17 +216,12 @@ output.innerHTML = "";
 return;
 }
 
-output.innerHTML = `
-<div class="result">
-${ppeDetails[value]}
-</div>
-`;
-
+output.innerHTML = `<div class="result">${ppeDetails[value]}</div>`;
 });
 
-// PDF
+// PDF VIEWER
 function openPDF(file, page){
-viewer.src = file + "#page=" + page;
+document.getElementById("pdfViewer").src = file + "#page=" + page;
 }
 
 </script>
