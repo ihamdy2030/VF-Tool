@@ -5,7 +5,12 @@
 <title>Smart Audit Engine</title>
 
 <style>
-body {font-family:'Segoe UI'; margin:0; background:#f4f6f8;}
+
+body {
+font-family: Arial;
+margin:0;
+background:#f4f6f8;
+}
 
 .header {
 display:flex;
@@ -16,30 +21,35 @@ padding:15px 25px;
 box-shadow:0 2px 8px rgba(0,0,0,0.1);
 }
 
-.logo {height:50px;}
+.logo {height:45px;}
 
 .title {
-font-size:20px;
+font-size:22px;
 font-weight:bold;
 color:#003366;
 flex:1;
 text-align:center;
 }
 
-.container {padding:20px;}
+.container {
+max-width:1200px;
+margin:auto;
+padding:20px;
+}
 
 #search {
 width:100%;
 padding:14px;
 font-size:16px;
-border-radius:8px;
+border-radius:10px;
 border:1px solid #ccc;
+margin-bottom:15px;
 }
 
 .result {
 background:white;
-margin-top:12px;
 padding:15px;
+margin-top:10px;
 border-radius:10px;
 box-shadow:0 2px 5px rgba(0,0,0,0.1);
 border-left:5px solid #003366;
@@ -58,33 +68,39 @@ cursor:pointer;
 iframe {
 width:100%;
 height:500px;
-margin-top:15px;
+margin-top:20px;
 border-radius:10px;
 }
 
+/* TABLE FIX */
 table {
 width:100%;
-margin-top:20px;
 border-collapse:collapse;
+margin-top:20px;
 background:white;
 }
 
 th {
 background:#003366;
 color:white;
-padding:10px;
+padding:12px;
+text-align:left;
 }
 
 td {
 padding:10px;
 border-bottom:1px solid #ddd;
 }
+
+tr:hover {
+background:#f1f1f1;
+}
+
 </style>
 </head>
 
 <body>
 
-<!-- HEADER -->
 <div class="header">
 <img src="tuv.png" class="logo">
 <div class="title">Smart Audit Engine</div>
@@ -99,40 +115,34 @@ border-bottom:1px solid #ddd;
 
 <iframe id="pdfViewer"></iframe>
 
-<h2>PPE & EN Standards (Comprehensive)</h2>
+<h2>PPE & EN Standards (Comprehensive List)</h2>
 
 <table>
-<tr><th>Category</th><th>PPE</th><th>EN Standard</th></tr>
+<tr>
+<th>Category</th>
+<th>PPE</th>
+<th>EN Standard</th>
+</tr>
 
 <tr><td>Head</td><td>Safety Helmet</td><td>EN 397</td></tr>
 <tr><td>Head</td><td>Climbing Helmet</td><td>EN 12492</td></tr>
-
-<tr><td>Eye & Face</td><td>Safety Glasses</td><td>EN 166</td></tr>
-<tr><td>Eye & Face</td><td>Face Shield</td><td>EN 166 / EN 170</td></tr>
-<tr><td>Eye & Face</td><td>Welding Helmet</td><td>EN 175 / EN 379</td></tr>
-
+<tr><td>Eye</td><td>Safety Glasses</td><td>EN 166</td></tr>
+<tr><td>Face</td><td>Face Shield</td><td>EN 166 / EN 170</td></tr>
+<tr><td>Welding</td><td>Welding Helmet</td><td>EN 175 / EN 379</td></tr>
 <tr><td>Hearing</td><td>Ear Protection</td><td>EN 352</td></tr>
-
 <tr><td>Respiratory</td><td>Mask</td><td>EN 149</td></tr>
 <tr><td>Respiratory</td><td>Respirator</td><td>EN 140 / EN 143</td></tr>
-
 <tr><td>Hands</td><td>Mechanical Gloves</td><td>EN 388</td></tr>
 <tr><td>Hands</td><td>Chemical Gloves</td><td>EN 374</td></tr>
 <tr><td>Hands</td><td>Heat Gloves</td><td>EN 407</td></tr>
 <tr><td>Hands</td><td>Electrical Gloves</td><td>EN 60903</td></tr>
-
 <tr><td>Foot</td><td>Safety Shoes</td><td>EN ISO 20345</td></tr>
 <tr><td>Foot</td><td>Dielectric Shoes</td><td>EN 50321</td></tr>
-
 <tr><td>Body</td><td>Hi-Vis Vest</td><td>EN ISO 20471</td></tr>
 <tr><td>Body</td><td>Protective Clothing</td><td>EN ISO 13688</td></tr>
-<tr><td>Body</td><td>Welding Clothing</td><td>EN ISO 11611</td></tr>
-
 <tr><td>Fall Protection</td><td>Harness</td><td>EN 361</td></tr>
 <tr><td>Fall Protection</td><td>Lanyard</td><td>EN 354 / EN 355</td></tr>
 <tr><td>Fall Protection</td><td>Anchor</td><td>EN 795</td></tr>
-<tr><td>Fall Protection</td><td>Fall Arrestor</td><td>EN 360</td></tr>
-
 <tr><td>Electrical</td><td>Insulating Mat</td><td>EN 6111</td></tr>
 
 </table>
@@ -141,67 +151,19 @@ border-bottom:1px solid #ddd;
 
 <script>
 
-// DATA
 const data = [
-
 {
 activity:"Confined Space",
-text:"Confined space requires gas testing and permit.",
+text:"Confined space requires gas testing.",
 keywords:"confined space gas ppe",
 hazard:"Toxic gas",
-ppe:"Respirator, Harness",
-en:"EN 140, EN 361",
+ppe:"Respirator",
+en:"EN 140",
 page:14,
 file:"HSW22.pdf"
-},
-
-{
-activity:"Working at Height",
-text:"Fall protection is required.",
-keywords:"height harness ppe",
-hazard:"Fall",
-ppe:"Harness, Helmet",
-en:"EN 361, EN 397",
-page:8,
-file:"HSW22.pdf"
-},
-
-{
-activity:"Hot Work",
-text:"Welding requires PPE and fire safety.",
-keywords:"welding fire ppe",
-hazard:"Fire",
-ppe:"Helmet, Gloves",
-en:"EN 175, EN 379",
-page:20,
-file:"HSW22.pdf"
-},
-
-{
-activity:"Electrical Work",
-text:"Electrical work requires insulated PPE.",
-keywords:"electric shock ppe",
-hazard:"Electric shock",
-ppe:"Insulated gloves",
-en:"EN 60903",
-page:9,
-file:"HSW22.pdf"
-},
-
-{
-activity:"General PPE",
-text:"All PPE must meet EN standards.",
-keywords:"ppe safety equipment",
-hazard:"General",
-ppe:"All PPE",
-en:"Multiple EN",
-page:24,
-file:"HSW22.pdf"
 }
-
 ];
 
-// SEARCH
 document.getElementById("search").addEventListener("input", function(e){
 
 let keyword = e.target.value.toLowerCase();
@@ -221,26 +183,17 @@ item.keywords.toLowerCase().includes(keyword)
 results.forEach(item => {
 resultsDiv.innerHTML += `
 <div class="result">
-
 <b>${item.activity}</b>
-
 <div>${item.text}</div>
-
-<div><b>Hazard:</b> ${item.hazard}</div>
 <div><b>PPE:</b> ${item.ppe}</div>
 <div><b>EN:</b> ${item.en}</div>
-
-<button onclick="openPDF('${item.file}', ${item.page})">
-📄 Open Page ${item.page}
-</button>
-
+<button onclick="openPDF('${item.file}', ${item.page})">Open PDF</button>
 </div>
 `;
 });
 
 });
 
-// PDF
 function openPDF(file, page){
 document.getElementById("pdfViewer").src = file + "#page=" + page;
 }
