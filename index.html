@@ -5,6 +5,7 @@
 <title>Smart Audit Engine</title>
 
 <style>
+body {font-family:'Segoe UI'; margin:0; background:#f4f6f8;}
 
 .header {
 display:flex;
@@ -26,10 +27,6 @@ text-align:center;
 }
 
 .container {padding:20px;}
-
-</style>
-
-</head>
 
 #search {
 width:100%;
@@ -72,8 +69,16 @@ border-collapse:collapse;
 background:white;
 }
 
-th {background:#003366; color:white; padding:10px;}
-td {padding:10px; border-bottom:1px solid #ddd;}
+th {
+background:#003366;
+color:white;
+padding:10px;
+}
+
+td {
+padding:10px;
+border-bottom:1px solid #ddd;
+}
 </style>
 </head>
 
@@ -94,69 +99,40 @@ td {padding:10px; border-bottom:1px solid #ddd;}
 
 <iframe id="pdfViewer"></iframe>
 
-<h2>PPE & EN Standards (Comprehensive List)</h2>
+<h2>PPE & EN Standards (Comprehensive)</h2>
 
 <table>
-<tr><th>PPE Category</th><th>PPE</th><th>EN Standard</th></tr>
+<tr><th>Category</th><th>PPE</th><th>EN Standard</th></tr>
 
-<!-- HEAD -->
-<tr><td>Head Protection</td><td>Safety Helmet</td><td>EN 397</td></tr>
-<tr><td>Head Protection</td><td>Climbing Helmet</td><td>EN 12492</td></tr>
+<tr><td>Head</td><td>Safety Helmet</td><td>EN 397</td></tr>
+<tr><td>Head</td><td>Climbing Helmet</td><td>EN 12492</td></tr>
 
-<!-- EYE & FACE -->
 <tr><td>Eye & Face</td><td>Safety Glasses</td><td>EN 166</td></tr>
-<tr><td>Eye & Face</td><td>UV Protection</td><td>EN 170</td></tr>
-<tr><td>Eye & Face</td><td>Face Shield</td><td>EN 166</td></tr>
+<tr><td>Eye & Face</td><td>Face Shield</td><td>EN 166 / EN 170</td></tr>
 <tr><td>Eye & Face</td><td>Welding Helmet</td><td>EN 175 / EN 379</td></tr>
 
-<!-- HEARING -->
-<tr><td>Hearing Protection</td><td>Ear Plugs / Ear Muff</td><td>EN 352</td></tr>
+<tr><td>Hearing</td><td>Ear Protection</td><td>EN 352</td></tr>
 
-<!-- RESPIRATORY -->
-<tr><td>Respiratory</td><td>Disposable Mask</td><td>EN 149</td></tr>
-<tr><td>Respiratory</td><td>Half Mask Respirator</td><td>EN 140</td></tr>
-<tr><td>Respiratory</td><td>Filters</td><td>EN 143 / EN 14387</td></tr>
+<tr><td>Respiratory</td><td>Mask</td><td>EN 149</td></tr>
+<tr><td>Respiratory</td><td>Respirator</td><td>EN 140 / EN 143</td></tr>
 
-<!-- HAND -->
-<tr><td>Hand Protection</td><td>Mechanical Gloves</td><td>EN 388</td></tr>
-<tr><td>Hand Protection</td><td>Chemical Gloves</td><td>EN 374</td></tr>
-<tr><td>Hand Protection</td><td>Heat Resistant Gloves</td><td>EN 407</td></tr>
-<tr><td>Hand Protection</td><td>Electrical Gloves</td><td>EN 60903</td></tr>
+<tr><td>Hands</td><td>Mechanical Gloves</td><td>EN 388</td></tr>
+<tr><td>Hands</td><td>Chemical Gloves</td><td>EN 374</td></tr>
+<tr><td>Hands</td><td>Heat Gloves</td><td>EN 407</td></tr>
+<tr><td>Hands</td><td>Electrical Gloves</td><td>EN 60903</td></tr>
 
-<!-- FOOT -->
-<tr><td>Foot Protection</td><td>Safety Shoes</td><td>EN ISO 20345</td></tr>
-<tr><td>Foot Protection</td><td>Dielectric Footwear</td><td>EN 50321</td></tr>
+<tr><td>Foot</td><td>Safety Shoes</td><td>EN ISO 20345</td></tr>
+<tr><td>Foot</td><td>Dielectric Shoes</td><td>EN 50321</td></tr>
 
-<!-- BODY -->
-<tr><td>Body Protection</td><td>High Visibility Vest</td><td>EN ISO 20471</td></tr>
-<tr><td>Body Protection</td><td>General Protective Clothing</td><td>EN ISO 13688</td></tr>
-<tr><td>Body Protection</td><td>Welding Clothing</td><td>EN ISO 11611</td></tr>
-<tr><td>Body Protection</td><td>Arc Flash Clothing</td><td>EN 61482</td></tr>
+<tr><td>Body</td><td>Hi-Vis Vest</td><td>EN ISO 20471</td></tr>
+<tr><td>Body</td><td>Protective Clothing</td><td>EN ISO 13688</td></tr>
+<tr><td>Body</td><td>Welding Clothing</td><td>EN ISO 11611</td></tr>
 
-<!-- FALL PROTECTION -->
-<tr><td>Fall Protection</td><td>Full Body Harness</td><td>EN 361</td></tr>
-<tr><td>Fall Protection</td><td>Positioning Harness</td><td>EN 358</td></tr>
-<tr><td>Fall Protection</td><td>Sit Harness</td><td>EN 813</td></tr>
-<tr><td>Fall Protection</td><td>Lanyards</td><td>EN 354 / EN 355</td></tr>
-<tr><td>Fall Protection</td><td>Fall Arrest Blocks</td><td>EN 360</td></tr>
-<tr><td>Fall Protection</td><td>Connectors</td><td>EN 362</td></tr>
-<tr><td>Fall Protection</td><td>Fall Arrest Systems</td><td>EN 363</td></tr>
-<tr><td>Fall Protection</td><td>Anchorage Systems</td><td>EN 795</td></tr>
-<tr><td>Fall Protection</td><td>Vertical Lifeline</td><td>EN 353-1</td></tr>
-<tr><td>Fall Protection</td><td>Flexible Lifeline</td><td>EN 353-2</td></tr>
+<tr><td>Fall Protection</td><td>Harness</td><td>EN 361</td></tr>
+<tr><td>Fall Protection</td><td>Lanyard</td><td>EN 354 / EN 355</td></tr>
+<tr><td>Fall Protection</td><td>Anchor</td><td>EN 795</td></tr>
+<tr><td>Fall Protection</td><td>Fall Arrestor</td><td>EN 360</td></tr>
 
-<!-- ROPE ACCESS -->
-<tr><td>Rope Access</td><td>Descenders</td><td>EN 341</td></tr>
-<tr><td>Rope Access</td><td>Rope Clamps</td><td>EN 567</td></tr>
-<tr><td>Rope Access</td><td>Pulleys</td><td>EN 12278</td></tr>
-<tr><td>Rope Access</td><td>Ropes</td><td>EN 1891</td></tr>
-
-<!-- RIGGING -->
-<tr><td>Rigging</td><td>Slings (Textile)</td><td>EN 1492-2</td></tr>
-<tr><td>Rigging</td><td>Connectors</td><td>EN 12275</td></tr>
-<tr><td>Rigging</td><td>Wire Slings</td><td>BS 1290</td></tr>
-
-<!-- ELECTRICAL -->
 <tr><td>Electrical</td><td>Insulating Mat</td><td>EN 6111</td></tr>
 
 </table>
@@ -165,14 +141,14 @@ td {padding:10px; border-bottom:1px solid #ddd;}
 
 <script>
 
-// DATA (موسعة)
+// DATA
 const data = [
 
 {
 activity:"Confined Space",
-text:"Confined space work requires gas testing, permit and PPE.",
-keywords:"confined space gas oxygen ppe",
-hazard:"Toxic gas / low oxygen",
+text:"Confined space requires gas testing and permit.",
+keywords:"confined space gas ppe",
+hazard:"Toxic gas",
 ppe:"Respirator, Harness",
 en:"EN 140, EN 361",
 page:14,
@@ -181,9 +157,9 @@ file:"HSW22.pdf"
 
 {
 activity:"Working at Height",
-text:"Full fall protection PPE required when working at height.",
-keywords:"height fall harness ppe",
-hazard:"Fall from height",
+text:"Fall protection is required.",
+keywords:"height harness ppe",
+hazard:"Fall",
 ppe:"Harness, Helmet",
 en:"EN 361, EN 397",
 page:8,
@@ -192,10 +168,10 @@ file:"HSW22.pdf"
 
 {
 activity:"Hot Work",
-text:"Hot work such as welding requires PPE and fire protection.",
-keywords:"welding cutting fire hot work ppe",
-hazard:"Fire / burns",
-ppe:"Welding helmet, gloves",
+text:"Welding requires PPE and fire safety.",
+keywords:"welding fire ppe",
+hazard:"Fire",
+ppe:"Helmet, Gloves",
 en:"EN 175, EN 379",
 page:20,
 file:"HSW22.pdf"
@@ -203,8 +179,8 @@ file:"HSW22.pdf"
 
 {
 activity:"Electrical Work",
-text:"Electrical work requires isolation and insulated PPE.",
-keywords:"electric shock arc ppe",
+text:"Electrical work requires insulated PPE.",
+keywords:"electric shock ppe",
 hazard:"Electric shock",
 ppe:"Insulated gloves",
 en:"EN 60903",
@@ -214,9 +190,9 @@ file:"HSW22.pdf"
 
 {
 activity:"General PPE",
-text:"All PPE must comply with EN standards.",
-keywords:"ppe equipment safety",
-hazard:"General hazards",
+text:"All PPE must meet EN standards.",
+keywords:"ppe safety equipment",
+hazard:"General",
 ppe:"All PPE",
 en:"Multiple EN",
 page:24,
@@ -264,7 +240,7 @@ resultsDiv.innerHTML += `
 
 });
 
-// PDF FIX
+// PDF
 function openPDF(file, page){
 document.getElementById("pdfViewer").src = file + "#page=" + page;
 }
