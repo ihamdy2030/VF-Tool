@@ -6,14 +6,6 @@
 
 <style>
 body {font-family:'Segoe UI'; margin:0; background:#f4f6f8;}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>Smart Audit Engine</title>
-
-<style>
-body {font-family:'Segoe UI'; margin:0; background:#f4f6f8;}
 
 .header {
 display:flex;
@@ -53,8 +45,6 @@ box-shadow:0 2px 5px rgba(0,0,0,0.1);
 border-left:5px solid #003366;
 }
 
-.highlight {background:yellow;}
-
 button {
 margin-top:10px;
 padding:8px 12px;
@@ -69,6 +59,7 @@ iframe {
 width:100%;
 height:500px;
 margin-top:15px;
+border-radius:10px;
 }
 
 table {
@@ -85,6 +76,7 @@ td {padding:10px; border-bottom:1px solid #ddd;}
 
 <body>
 
+<!-- HEADER -->
 <div class="header">
 <img src="tuv.png" class="logo">
 <div class="title">Smart Audit Engine</div>
@@ -113,13 +105,14 @@ td {padding:10px; border-bottom:1px solid #ddd;}
 
 <script>
 
+// DATA (موسعة)
 const data = [
 
 {
 activity:"Confined Space",
-text:"Confined space work requires gas testing and permit.",
+text:"Confined space work requires gas testing, permit and PPE.",
 keywords:"confined space gas oxygen ppe",
-hazard:"Toxic gas",
+hazard:"Toxic gas / low oxygen",
 ppe:"Respirator, Harness",
 en:"EN 140, EN 361",
 page:14,
@@ -128,9 +121,9 @@ file:"HSW22.pdf"
 
 {
 activity:"Working at Height",
-text:"Working at height requires full fall protection PPE.",
+text:"Full fall protection PPE required when working at height.",
 keywords:"height fall harness ppe",
-hazard:"Fall",
+hazard:"Fall from height",
 ppe:"Harness, Helmet",
 en:"EN 361, EN 397",
 page:8,
@@ -139,12 +132,23 @@ file:"HSW22.pdf"
 
 {
 activity:"Hot Work",
-text:"Hot work requires welding PPE and fire control.",
-keywords:"welding fire ppe hot work",
-hazard:"Fire",
-ppe:"Helmet, Gloves",
+text:"Hot work such as welding requires PPE and fire protection.",
+keywords:"welding cutting fire hot work ppe",
+hazard:"Fire / burns",
+ppe:"Welding helmet, gloves",
 en:"EN 175, EN 379",
 page:20,
+file:"HSW22.pdf"
+},
+
+{
+activity:"Electrical Work",
+text:"Electrical work requires isolation and insulated PPE.",
+keywords:"electric shock arc ppe",
+hazard:"Electric shock",
+ppe:"Insulated gloves",
+en:"EN 60903",
+page:9,
 file:"HSW22.pdf"
 },
 
@@ -152,7 +156,7 @@ file:"HSW22.pdf"
 activity:"General PPE",
 text:"All PPE must comply with EN standards.",
 keywords:"ppe equipment safety",
-hazard:"General",
+hazard:"General hazards",
 ppe:"All PPE",
 en:"Multiple EN",
 page:24,
@@ -202,222 +206,6 @@ resultsDiv.innerHTML += `
 
 // PDF FIX
 function openPDF(file, page){
-document.getElementById("pdfViewer").src = file + "#page=" + page;
-}
-
-</script>
-
-</body>
-</html>
-.header {
-display:flex;
-align-items:center;
-justify-content:space-between;
-background:white;
-padding:15px 25px;
-box-shadow:0 2px 8px rgba(0,0,0,0.1);
-}
-
-.logo {height:50px;}
-
-.title {
-font-size:20px;
-font-weight:bold;
-color:#003366;
-flex:1;
-text-align:center;
-}
-
-.container {padding:20px;}
-
-#search {
-width:100%;
-padding:14px;
-font-size:16px;
-border-radius:8px;
-border:1px solid #ccc;
-}
-
-.suggestions {
-background:white;
-border:1px solid #ccc;
-border-top:none;
-max-height:150px;
-overflow:auto;
-}
-
-.suggestion {
-padding:10px;
-cursor:pointer;
-}
-
-.suggestion:hover {background:#f1f1f1;}
-
-.result {
-background:white;
-margin-top:12px;
-padding:15px;
-border-radius:10px;
-box-shadow:0 2px 5px rgba(0,0,0,0.1);
-border-left:5px solid #003366;
-}
-
-.highlight {background:yellow;}
-
-button {
-margin-top:10px;
-padding:8px 12px;
-background:#e60000;
-color:white;
-border:none;
-border-radius:5px;
-cursor:pointer;
-}
-
-iframe {
-width:100%;
-height:500px;
-margin-top:15px;
-}
-</style>
-</head>
-
-<body>
-
-<div class="header">
-<img src="tuv.png" class="logo">
-<div class="title">Smart Audit Engine</div>
-<img src="vodafone.png" class="logo">
-</div>
-
-<div class="container">
-
-<input type="text" id="search" placeholder="🔍 Search anything (PPE, EN, Activity...)">
-<div id="suggestions" class="suggestions"></div>
-
-<div id="results"></div>
-
-<iframe id="pdfViewer"></iframe>
-
-</div>
-
-<script>
-
-const data = [
-{
-activity:"Confined Space",
-text:"Confined spaces require gas testing and permit.",
-keywords:"confined space gas oxygen entry permit",
-hazard:"Toxic gas",
-ppe:"Respirator, Harness",
-en:"EN 140, EN 143, EN 361",
-page:14,
-file:"HSW22.pdf"
-},
-{
-activity:"Working at Height",
-text:"Full fall protection required.",
-keywords:"height fall harness lanyard",
-hazard:"Fall",
-ppe:"Harness, Helmet",
-en:"EN 361, EN 397",
-page:8,
-file:"HSW22.pdf"
-},
-{
-activity:"Hot Work",
-text:"Welding requires fire protection.",
-keywords:"welding cutting hot work fire",
-hazard:"Fire",
-ppe:"Helmet, Gloves",
-en:"EN 175, EN 379",
-page:20,
-file:"HSW22.pdf"
-}
-];
-
-const searchInput = document.getElementById("search");
-const resultsDiv = document.getElementById("results");
-const suggestionsDiv = document.getElementById("suggestions");
-
-function highlight(text, keyword){
-return text.replace(new RegExp(keyword, "gi"),
-m => `<span class="highlight">${m}</span>`);
-}
-
-// Suggestions
-searchInput.addEventListener("input", function(){
-let keyword = this.value.toLowerCase();
-suggestionsDiv.innerHTML = "";
-
-if(keyword.length < 2) return;
-
-let suggestions = data.filter(item =>
-item.activity.toLowerCase().includes(keyword) ||
-item.keywords.includes(keyword)
-);
-
-suggestions.forEach(item=>{
-suggestionsDiv.innerHTML += `
-<div class="suggestion" onclick="selectSuggestion('${item.activity}')">
-${item.activity}
-</div>`;
-});
-});
-
-function selectSuggestion(text){
-searchInput.value = text;
-suggestionsDiv.innerHTML = "";
-performSearch(text.toLowerCase());
-}
-
-// Search
-searchInput.addEventListener("keyup", function(e){
-performSearch(this.value.toLowerCase());
-});
-
-function performSearch(keyword){
-
-resultsDiv.innerHTML = "";
-if(keyword === "") return;
-
-let results = data.map(item => {
-
-let score = 0;
-
-if(item.activity.toLowerCase().includes(keyword)) score += 5;
-if(item.text.toLowerCase().includes(keyword)) score += 3;
-if(item.ppe.toLowerCase().includes(keyword)) score += 2;
-if(item.en.toLowerCase().includes(keyword)) score += 2;
-if(item.keywords.toLowerCase().includes(keyword)) score += 4;
-
-return {...item, score};
-})
-.filter(item => item.score > 0)
-.sort((a,b)=> b.score - a.score);
-
-results.forEach(item=>{
-resultsDiv.innerHTML += `
-<div class="result">
-
-<b>${highlight(item.activity, keyword)}</b>
-
-<div>${highlight(item.text, keyword)}</div>
-
-<div><b>Hazard:</b> ${item.hazard}</div>
-<div><b>PPE:</b> ${item.ppe}</div>
-<div><b>EN:</b> ${item.en}</div>
-
-<button onclick="openPDF('${item.file}', ${item.page}')">
-📄 Open Page ${item.page}
-</button>
-
-</div>`;
-});
-
-}
-
-function openPDF(file,page){
 document.getElementById("pdfViewer").src = file + "#page=" + page;
 }
 
