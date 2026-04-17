@@ -6,7 +6,209 @@
 
 <style>
 body {font-family:'Segoe UI'; margin:0; background:#f4f6f8;}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Smart Audit Engine</title>
 
+<style>
+body {font-family:'Segoe UI'; margin:0; background:#f4f6f8;}
+
+.header {
+display:flex;
+align-items:center;
+justify-content:space-between;
+background:white;
+padding:15px 25px;
+box-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
+
+.logo {height:50px;}
+
+.title {
+font-size:20px;
+font-weight:bold;
+color:#003366;
+flex:1;
+text-align:center;
+}
+
+.container {padding:20px;}
+
+#search {
+width:100%;
+padding:14px;
+font-size:16px;
+border-radius:8px;
+border:1px solid #ccc;
+}
+
+.result {
+background:white;
+margin-top:12px;
+padding:15px;
+border-radius:10px;
+box-shadow:0 2px 5px rgba(0,0,0,0.1);
+border-left:5px solid #003366;
+}
+
+.highlight {background:yellow;}
+
+button {
+margin-top:10px;
+padding:8px 12px;
+background:#e60000;
+color:white;
+border:none;
+border-radius:5px;
+cursor:pointer;
+}
+
+iframe {
+width:100%;
+height:500px;
+margin-top:15px;
+}
+
+table {
+width:100%;
+margin-top:20px;
+border-collapse:collapse;
+background:white;
+}
+
+th {background:#003366; color:white; padding:10px;}
+td {padding:10px; border-bottom:1px solid #ddd;}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+<img src="tuv.png" class="logo">
+<div class="title">Smart Audit Engine</div>
+<img src="vodafone.png" class="logo">
+</div>
+
+<div class="container">
+
+<input type="text" id="search" placeholder="🔍 Search (PPE, EN, Activity...)">
+
+<div id="results"></div>
+
+<iframe id="pdfViewer"></iframe>
+
+<h2>PPE & EN Standards</h2>
+<table>
+<tr><th>PPE</th><th>EN</th></tr>
+<tr><td>Helmet</td><td>EN 397</td></tr>
+<tr><td>Harness</td><td>EN 361</td></tr>
+<tr><td>Lanyard</td><td>EN 355</td></tr>
+<tr><td>Gloves</td><td>EN 388 / EN 374</td></tr>
+<tr><td>Respirator</td><td>EN 140</td></tr>
+</table>
+
+</div>
+
+<script>
+
+const data = [
+
+{
+activity:"Confined Space",
+text:"Confined space work requires gas testing and permit.",
+keywords:"confined space gas oxygen ppe",
+hazard:"Toxic gas",
+ppe:"Respirator, Harness",
+en:"EN 140, EN 361",
+page:14,
+file:"HSW22.pdf"
+},
+
+{
+activity:"Working at Height",
+text:"Working at height requires full fall protection PPE.",
+keywords:"height fall harness ppe",
+hazard:"Fall",
+ppe:"Harness, Helmet",
+en:"EN 361, EN 397",
+page:8,
+file:"HSW22.pdf"
+},
+
+{
+activity:"Hot Work",
+text:"Hot work requires welding PPE and fire control.",
+keywords:"welding fire ppe hot work",
+hazard:"Fire",
+ppe:"Helmet, Gloves",
+en:"EN 175, EN 379",
+page:20,
+file:"HSW22.pdf"
+},
+
+{
+activity:"General PPE",
+text:"All PPE must comply with EN standards.",
+keywords:"ppe equipment safety",
+hazard:"General",
+ppe:"All PPE",
+en:"Multiple EN",
+page:24,
+file:"HSW22.pdf"
+}
+
+];
+
+// SEARCH
+document.getElementById("search").addEventListener("input", function(e){
+
+let keyword = e.target.value.toLowerCase();
+let resultsDiv = document.getElementById("results");
+resultsDiv.innerHTML = "";
+
+if(keyword === "") return;
+
+let results = data.filter(item =>
+item.text.toLowerCase().includes(keyword) ||
+item.activity.toLowerCase().includes(keyword) ||
+item.ppe.toLowerCase().includes(keyword) ||
+item.en.toLowerCase().includes(keyword) ||
+item.keywords.toLowerCase().includes(keyword)
+);
+
+results.forEach(item => {
+resultsDiv.innerHTML += `
+<div class="result">
+
+<b>${item.activity}</b>
+
+<div>${item.text}</div>
+
+<div><b>Hazard:</b> ${item.hazard}</div>
+<div><b>PPE:</b> ${item.ppe}</div>
+<div><b>EN:</b> ${item.en}</div>
+
+<button onclick="openPDF('${item.file}', ${item.page})">
+📄 Open Page ${item.page}
+</button>
+
+</div>
+`;
+});
+
+});
+
+// PDF FIX
+function openPDF(file, page){
+document.getElementById("pdfViewer").src = file + "#page=" + page;
+}
+
+</script>
+
+</body>
+</html>
 .header {
 display:flex;
 align-items:center;
