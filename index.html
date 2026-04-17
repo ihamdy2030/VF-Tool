@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>HSE Smart Audit Engine</title>
+<title>Smart Audit Engine</title>
 
 <style>
 body {font-family:'Segoe UI'; margin:0; background:#f4f6f8;}
@@ -10,7 +10,7 @@ body {font-family:'Segoe UI'; margin:0; background:#f4f6f8;}
 .header {
 display:flex;
 align-items:center;
-gap:15px;
+justify-content:space-between;
 background:white;
 padding:15px 25px;
 box-shadow:0 2px 8px rgba(0,0,0,0.1);
@@ -22,16 +22,19 @@ box-shadow:0 2px 8px rgba(0,0,0,0.1);
 font-size:20px;
 font-weight:bold;
 color:#003366;
+text-align:center;
+flex:1;
 }
 
 .vodafone-line {height:5px; background:#e60000;}
 
 .container {padding:20px;}
 
-#search {
+#search, #ppeFilter {
 width:100%;
-padding:14px;
-font-size:16px;
+padding:12px;
+margin-bottom:10px;
+font-size:15px;
 border-radius:8px;
 border:1px solid #ccc;
 }
@@ -75,25 +78,16 @@ background:white;
 
 th {background:#003366; color:white; padding:10px;}
 td {padding:10px; border-bottom:1px solid #ddd;}
-
 </style>
 </head>
 
 <body>
 
+<!-- HEADER -->
 <div class="header">
-
-<!-- LEFT (TUV) -->
 <img src="tuv.png" class="logo">
-
-<!-- CENTER (TITLE) -->
-<div class="title" style="flex:1; text-align:center;">
-Smart Audit Engine
-</div>
-
-<!-- RIGHT (Vodafone) -->
+<div class="title">Smart Audit Engine</div>
 <img src="vodafone.png" class="logo">
-
 </div>
 
 <div class="vodafone-line"></div>
@@ -102,7 +96,14 @@ Smart Audit Engine
 
 <input type="text" id="search" placeholder="🔍 Search (PPE, Height, EN 361...)">
 
+<select id="ppeFilter">
+<option value="">Select PPE Category</option>
+<option value="height">Working at Height</option>
+<option value="electrical">Electrical Work</option>
+</select>
+
 <div id="results"></div>
+<div id="ppeResults"></div>
 
 <iframe id="pdfViewer"></iframe>
 
@@ -113,99 +114,68 @@ Smart Audit Engine
 <tr><td>Helmet</td><td>EN 397</td></tr>
 <tr><td>High Visibility Vest</td><td>EN ISO 20471</td></tr>
 <tr><td>Safety Shoes</td><td>EN ISO 20345</td></tr>
-<tr><td>Dielectric Shoes</td><td>EN 50321</td></tr>
 <tr><td>Harness</td><td>EN 361</td></tr>
 <tr><td>Lanyard</td><td>EN 355</td></tr>
-<tr><td>Lifeline</td><td>EN 795</td></tr>
-<tr><td>Mechanical Gloves</td><td>EN 388</td></tr>
-<tr><td>Chemical Gloves</td><td>EN 374</td></tr>
-<tr><td>Heat Gloves</td><td>EN 407</td></tr>
-<tr><td>Safety Glasses</td><td>EN 166</td></tr>
-<tr><td>Face Shield</td><td>EN 166 / EN 170</td></tr>
+<tr><td>Gloves</td><td>EN 388 / EN 374</td></tr>
+<tr><td>Eye Protection</td><td>EN 166</td></tr>
 <tr><td>Respirator</td><td>EN 140 / EN 143</td></tr>
-<tr><td>Mask</td><td>EN 149</td></tr>
 <tr><td>Hearing Protection</td><td>EN 352</td></tr>
-<tr><td>Protective Clothing</td><td>EN ISO 13688</td></tr>
-<tr><td>Welding PPE</td><td>EN ISO 11611</td></tr>
-<tr><td>Arc Flash</td><td>EN 61482</td></tr>
 </table>
 
 </div>
 
 <script>
 
+// MAIN DATA
 const data = [
-
 {
 activity:"Working at Height",
 text:"Workers must remain attached at all times using full body harness.",
 hazard:"Fall from height",
-ppe:"Harness, Lanyard, Helmet, Safety Shoes",
-en:"EN 361, EN 355, EN 397, EN ISO 20345",
+ppe:"Harness, Lanyard, Helmet",
+en:"EN 361, EN 355, EN 397",
 page:8,
 file:"HSW22.pdf"
 },
-
 {
 activity:"Electrical Work",
 text:"No live electrical work is allowed.",
-hazard:"Electric shock / arc flash",
-ppe:"Dielectric gloves, Helmet, Face shield",
+hazard:"Electric shock",
+ppe:"Insulated gloves, helmet, face shield",
 en:"EN 60903, EN 397, EN 166",
 page:9,
 file:"HSW22.pdf"
-},
-
-{
-activity:"Lifting",
-text:"All lifting must be planned and supervised.",
-hazard:"Falling objects",
-ppe:"Helmet, Gloves, Safety Shoes",
-en:"EN 397, EN 388, EN ISO 20345",
-page:12,
-file:"HSW22.pdf"
-},
-
-{
-activity:"Confined Space",
-text:"Gas testing and rescue plan required.",
-hazard:"Toxic gases",
-ppe:"Respirator, Harness",
-en:"EN 140, EN 143, EN 361",
-page:14,
-file:"HSW22.pdf"
-},
-
-{
-activity:"Driving",
-text:"Seat belts must be worn.",
-hazard:"Road accident",
-ppe:"Seatbelt",
-en:"Vehicle Safety",
-page:7,
-file:"SHW22.pdf"
-},
-
-{
-activity:"General PPE",
-text:"All PPE must comply with EN standards.",
-hazard:"General risk",
-ppe:"All PPE",
-en:"All EN Standards",
-page:24,
-file:"HSW22.pdf"
 }
-
 ];
+
+// PPE DETAILS
+const ppeDetails = {
+height: `
+<h3>Working at Height - PPE Standards</h3>
+<ul>
+<li>EN 361 / 358 / 813 - Harness</li>
+<li>EN 354 / 355 - Lanyards</li>
+<li>EN 360 - Fall Arrestors</li>
+<li>EN 362 - Connectors</li>
+<li>EN 795 - Anchors</li>
+<li>EN 397 - Helmet</li>
+</ul>
+`,
+electrical: `
+<h3>Electrical Work - PPE Standards</h3>
+<ul>
+<li>EN 60903 - Gloves</li>
+<li>EN 50321 - Footwear</li>
+<li>EN 6111 - Insulating mat</li>
+<li>EN 166 - Face shield</li>
+</ul>
+`
+};
 
 const resultsDiv = document.getElementById("results");
 const viewer = document.getElementById("pdfViewer");
 
-function highlight(text, keyword){
-return text.replace(new RegExp(keyword, "gi"),
-match => `<span class="highlight">${match}</span>`);
-}
-
+// SEARCH
 document.getElementById("search").addEventListener("input", function(e){
 
 let keyword = e.target.value.toLowerCase();
@@ -223,27 +193,40 @@ item.en.toLowerCase().includes(keyword)
 results.forEach(item => {
 resultsDiv.innerHTML += `
 <div class="result">
-
 <div class="section">${item.activity}</div>
-
-<div><b>Requirement:</b> ${highlight(item.text, keyword)}</div>
-
+<div><b>Requirement:</b> ${item.text}</div>
 <div><b>Hazard:</b> ${item.hazard}</div>
-
-<div><b>Required PPE:</b> ${item.ppe}</div>
-
-<div><b>EN Standards:</b> ${item.en}</div>
-
+<div><b>PPE:</b> ${item.ppe}</div>
+<div><b>EN:</b> ${item.en}</div>
 <button onclick="openPDF('${item.file}', ${item.page})">
-📄 ${item.file} - Page ${item.page}
+📄 Open Page ${item.page}
 </button>
-
 </div>
 `;
 });
 
 });
 
+// DROPDOWN
+document.getElementById("ppeFilter").addEventListener("change", function(){
+
+let value = this.value;
+let output = document.getElementById("ppeResults");
+
+if(value === ""){
+output.innerHTML = "";
+return;
+}
+
+output.innerHTML = `
+<div class="result">
+${ppeDetails[value]}
+</div>
+`;
+
+});
+
+// PDF
 function openPDF(file, page){
 viewer.src = file + "#page=" + page;
 }
