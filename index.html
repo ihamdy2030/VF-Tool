@@ -307,7 +307,12 @@ resultsDiv.innerHTML += `
 });
 
 function openPDF(file, page){
-document.getElementById("pdfViewer").src = file + "#page=" + page;
+
+let keyword = document.getElementById("search").value;
+
+document.getElementById("pdfViewer").src =
+file + "#page=" + page + "&search=" + keyword;
+
 }
 
 </script>
