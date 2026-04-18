@@ -152,16 +152,128 @@ background:#f1f1f1;
 <script>
 
 const data = [
+
 {
 activity:"Confined Space",
-text:"Confined space requires gas testing.",
-keywords:"confined space gas ppe",
-hazard:"Toxic gas",
-ppe:"Respirator",
-en:"EN 140",
+text:"Confined space requires gas testing, permit and ventilation.",
+keywords:"confined space gas oxygen permit entry ppe",
+hazard:"Toxic gases / low oxygen",
+ppe:"Respirator, Harness, Gas Detector",
+en:"EN 140, EN 143, EN 361",
 page:14,
 file:"HSW22.pdf"
+},
+
+{
+activity:"Working at Height",
+text:"Working at height requires full fall protection at all times.",
+keywords:"height fall harness lanyard lifeline scaffold ppe",
+hazard:"Fall from height",
+ppe:"Harness, Lanyard, Helmet, Safety Shoes",
+en:"EN 361, EN 355, EN 397, EN ISO 20345",
+page:8,
+file:"HSW22.pdf"
+},
+
+{
+activity:"Electrical Work",
+text:"Electrical work requires isolation, lockout and insulated PPE.",
+keywords:"electric shock arc flash lockout ppe",
+hazard:"Electric shock / arc flash",
+ppe:"Insulated gloves, dielectric shoes, face shield",
+en:"EN 60903, EN 50321, EN 166",
+page:9,
+file:"HSW22.pdf"
+},
+
+{
+activity:"Hot Work",
+text:"Hot work includes welding and cutting requiring fire protection.",
+keywords:"welding cutting fire hot work sparks ppe",
+hazard:"Burns / fire",
+ppe:"Welding helmet, leather gloves, apron",
+en:"EN 175, EN 379, EN ISO 11611",
+page:20,
+file:"HSW22.pdf"
+},
+
+{
+activity:"Lifting Operations",
+text:"All lifting must be planned, supervised and properly rigged.",
+keywords:"lifting crane rigging slings load ppe",
+hazard:"Falling objects",
+ppe:"Helmet, Gloves, Safety Shoes, Vest",
+en:"EN 397, EN 388, EN ISO 20345",
+page:12,
+file:"HSW22.pdf"
+},
+
+{
+activity:"Excavation",
+text:"Excavation requires shoring, access control and utility detection.",
+keywords:"excavation trench collapse digging ppe",
+hazard:"Collapse / buried",
+ppe:"Helmet, Safety Shoes, Reflective Vest",
+en:"EN 397, EN ISO 20345",
+page:18,
+file:"HSW22.pdf"
+},
+
+{
+activity:"Manual Handling",
+text:"Manual handling requires proper lifting techniques.",
+keywords:"manual handling lifting carrying back injury ppe",
+hazard:"Musculoskeletal injuries",
+ppe:"Gloves, Safety Shoes",
+en:"EN 388, EN ISO 20345",
+page:16,
+file:"HSW22.pdf"
+},
+
+{
+activity:"Chemical Work",
+text:"Chemical handling requires proper PPE and ventilation.",
+keywords:"chemical acid hazard exposure ppe",
+hazard:"Chemical burns / inhalation",
+ppe:"Chemical gloves, respirator, goggles",
+en:"EN 374, EN 140, EN 166",
+page:22,
+file:"HSW22.pdf"
+},
+
+{
+activity:"RF Work",
+text:"RF work requires exposure monitoring and safety control.",
+keywords:"rf radiation telecom antenna exposure ppe",
+hazard:"Radiation exposure",
+ppe:"RF Monitor, Helmet",
+en:"RF Standards",
+page:25,
+file:"HSW22.pdf"
+},
+
+{
+activity:"Driving",
+text:"Driving requires seatbelt and safe driving behavior.",
+keywords:"driving vehicle transport safety ppe",
+hazard:"Accidents",
+ppe:"Seat Belt",
+en:"Vehicle Safety Standards",
+page:7,
+file:"SHW22.pdf"
+},
+
+{
+activity:"General PPE",
+text:"All PPE must comply with EN standards and be inspected.",
+keywords:"ppe safety equipment inspection en",
+hazard:"General risks",
+ppe:"All PPE",
+en:"All EN Standards",
+page:24,
+file:"HSW22.pdf"
 }
+
 ];
 
 document.getElementById("search").addEventListener("input", function(e){
